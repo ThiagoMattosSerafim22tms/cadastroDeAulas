@@ -1,0 +1,212 @@
+<table class="table table-striped">
+  <thead class="sticky-top">
+    <tr>
+      <th scope="col">Aluno</th>
+      <th scope="col">Professor</th>
+      <th scope="col">Disciplina</th>
+      <th scope="col">Data</th>
+      <th scope="col">Início</th>
+      <th scope="col">Fim</th>
+      <th scope="col">MODIFICAR</th>
+      <th scope="col">DELETAR</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+    <% listas.forEach(function(aula) {%>
+
+      <tr>
+        <td scope="row">
+          <%= aula.aluno %>
+        </td>
+        <td scope="row">
+          <%= aula.professor %>
+        </td>
+        <td scope="row">
+          <%= aula.disciplina %>
+        </td>
+        <td scope="row">
+          <%= aula.data %>
+        </td>
+        <td scope="row">
+          <%= aula.inicio %>
+        </td>
+
+        <td scope="row">
+          <%=aula.fim %>
+            <input hidden type="text" class="<%= `aula_${aula.id}` %>" value="<%= aula.id%>">
+            <input hidden type="text" class=<%=`aluno_${aula.id}` %> value="<%= aula.aluno %>">
+        </td>
+
+        <td scope="row">
+
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#<%=`modal_${aula.id}` %>">
+            MODIFICAR
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="<%=`modal_${aula.id}` %>" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Alterar </h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+
+
+                  <div class="container"> Aluno <input type="text" class="<%=`aluno_modal_${aula.id}` %>"
+                      name="<%=`aluno_modal_${aula.id}` %>" value="<%= aula.aluno %>"> </div>
+                  <div class="container"> Professor<input type="text" class="<%=`professor_modal_${aula.id}` %>"
+                      name="<%=`professor_modal_${aula.id}` %>" value="<%= aula.professor %>"> </div>
+
+                  <div class="container"> Disciplina <input type="text" class="<%=`disciplina_modal_${aula.id}` %>"
+                      name="<%=`disciplina_modal_${aula.id}` %>" value="<%= aula.disciplina %>"> </div>
+                  <div class="container"> Data <input type="date" class="<%=`data_modal_${aula.id}` %>"
+                      name="<%=`data_modal_${aula.id}` %>" value="<%= aula.data %>"> </div>
+                  <div class="container">Início <input type="time" class="<%=`inicio_modal_${aula.id}` %>"
+                      name="<%=`inicio_modal_${aula.id}` %>" value="<%= aula.inicio %>"></div>
+                  <div class="container"> Fim <input type="time" class="<%=`fim_modal_${aula.id}` %>"
+                      name="<%=`fim_modal_${aula.id}` %>" value="<%= aula.fim %>"> </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" onclick="alterarRecurso([document.querySelector('.<%= `aula_${aula.id}` %>'),
+                    document.querySelector('.<%= `aluno_modal_${aula.id}` %>'),
+                    document.querySelector('.<%= `professor_modal_${aula.id}` %>'), 
+                    document.querySelector('.<%= `disciplina_modal_${aula.id}` %>'), 
+                    document.querySelector('.<%= `data_modal_${aula.id}` %>'), 
+                    document.querySelector('.<%= `inicio_modal_${aula.id}` %>'), 
+                    document.querySelector('.<%= `fim_modal_${aula.id}` %>')] )" class="btn btn-info">
+                    MODIFICAR AULA
+                  </button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+        </td>
+
+        <td scope="row">
+
+
+          <button id="deletar_aula_btn" type="submit"
+            onclick="confirmarExclusao( [document.querySelector('.<%= `aula_${aula.id}` %>'),
+            document.querySelector('.<%= `aluno_${aula.id}` %>')]   )"
+            class="btn btn-danger">
+            DELETAR AULA
+          </button>
+
+
+
+        </td>
+
+
+      </tr>
+
+
+
+
+      <% }); %>
+
+  </tbody>
+</table>
+
+
+
+
+<script defer>
+
+  async function alterarRecurso(arrayDedados) {
+
+    let id = arrayDedados[0].value;
+    let aluno = arrayDedados[1].value;
+    let professor = arrayDedados[2].value;
+    let disciplina = arrayDedados[3].value;
+    let data = arrayDedados[4].value;
+    let inicio = arrayDedados[5].value
+    let fim = arrayDedados[6].value
+
+    console.log(id);
+    console.log(aluno);
+    console.log(professor);
+    console.log(disciplina);
+    console.log(data);
+    console.log(inicio);
+    console.log(fim);
+
+
+
+    try {
+
+      const response = await fetch(`/atualizar/aula/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json' // Define o tipo de conteúdo como JSON
+        },
+        body: JSON.stringify
+          ({ alunoChave: aluno, professorChave: professor, dataChave: data, inicioChave: inicio, fimChave: fim }) // Converte o objeto para JSON
+
+      }
+      );
+      if (response.ok) {
+
+        alert('Aula modificada com sucesso!');
+
+        window.location.reload()
+
+      }
+
+    }
+    catch (err) {
+      console.error('Erro ao modificar', err)
+    };
+
+
+  }
+
+  async function confirmarExclusao(arrayDedados) {
+
+    let id = arrayDedados[0].value;
+    let aluno = arrayDedados[1].value;
+
+    console.log(id);
+    console.log(aluno)
+
+    if (confirm('Deseja realmente DELETAR a aula?')) {
+
+      try {
+
+        const response = await fetch(`/deletar/aula/${id}/${aluno}`, {
+          method: 'DELETE',
+
+        }
+        );
+        if (response.ok) {
+
+          alert('Aula exluída com sucesso!');
+
+          window.location.reload()
+
+        }
+
+      }
+      catch (err) {
+        console.error('Erro ao excluir', err)
+      };
+    }
+
+  }
+
+
+
+</script>

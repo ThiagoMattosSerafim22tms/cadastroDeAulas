@@ -1,0 +1,76 @@
+<div class="container">
+    <div class="row-6 " style="margin-top: 10px;">
+        <form id="form_geral" method="get">
+            <div class="input-group">
+            
+                <span class="input-group-text">Início</span>
+                <input type="date" class="form-control" value="2024-01-01" id="data_inicial">
+    
+                <span class="input-group-text">Fim</span>
+                <input type="date" class="form-control" value="2100-01-01" id="data_final">
+    
+    
+            <button type="submit" class="btn btn-primary btn-sm">TODAS AS AULAS</button>
+            <spam for="basic-url" class="form-label"> </spam>
+        </div>
+
+        </form>
+
+    </div>
+
+
+    <div class="row-6" style="margin-top: 10px;">
+
+
+
+
+
+        <form method="get" id="form_por_aluno">
+            <div class="input-group">
+
+                <span class="input-group-text">Início</span>
+                <input type="date" class="form-control" value="2024-01-01" id="data_inicial_aluno">
+    
+                <span class="input-group-text">Fim</span>
+                <input type="date" class="form-control" value="2100-01-01" id="data_final_aluno">
+    
+
+                <span class="input-group-text" id="basic-addon_prof"></span>
+            <input type="text" required placeholder="Digite o nome do aluno" class="form-control" id="aluno_selecao"
+                name="aluno_selecao" aria-describedby="basic-addon3 basic-addon4" required>
+
+                <button type="submit" class="btn btn-primary btn-sm">AULAS POR ESTUDANTE</button>
+                <spam for="basic-url" class="form-label"> </spam>
+
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+    document.getElementById('form_geral').addEventListener('submit', function (event) {
+        event.preventDefault(); //Previne a ação default de recarregar a página
+        //recupera a data inicial di e final df
+        
+         di = document.getElementById('data_inicial').value;
+         df = document.getElementById('data_final').value;
+
+        window.location.href = '/home/listagem/' + encodeURIComponent(di) + '/' + encodeURIComponent(df);
+//alert('busca geral ok')
+    });
+    document.getElementById('form_por_aluno').addEventListener('submit', function (event) {
+        event.preventDefault(); //Previne a ação default de recarregar a página
+        di = document.getElementById('data_inicial_aluno').value;
+        df = document.getElementById('data_final_aluno').value;
+        var alunoSelecao = document.getElementById('aluno_selecao').value;
+        window.location.href = '/home/listageral/nome/' + encodeURIComponent(alunoSelecao)+ '/'+
+        encodeURIComponent(di) + '/' + encodeURIComponent(df);
+
+  //      alert('busca por aluno ok');
+    });
+</script>
+
+</div>
